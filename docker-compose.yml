@@ -1,0 +1,44 @@
+services:
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+            - "5672:5672"     # MassTransit/RabbitMQ
+            - "15672:15672"   # RabbitMQ web UI (http://localhost:15672)
+        environment:
+            RABBITMQ_DEFAULT_USER: guest
+            RABBITMQ_DEFAULT_PASS: guest
+
+    postgres:
+        image: postgres:16
+        container_name: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: appuser
+            POSTGRES_PASSWORD: appsecret
+            POSTGRES_DB: messagesdb
+        ports:
+            - "5432:5432"
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+
+    message-api:
+        build:
+            context: .
+            dockerfile: MessageApiService/Dockerfile
+        ports:
+            - "8888:80"
+        depends_on:
+            - rabbitmq
+
+    message-consumer:
+        build:
+            context: .
+            dockerfile: MessageConsumerService/Dockerfile
+        ports:
+            - "9999:80"
+        depends_on:
+            - rabbitmq
+            - postgres
+
+volumes:
+    pgdata:

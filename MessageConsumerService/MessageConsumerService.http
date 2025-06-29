@@ -1,0 +1,6 @@
+@MessageConsumerService_HostAddress = http://localhost:5022
+
+GET {{MessageConsumerService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

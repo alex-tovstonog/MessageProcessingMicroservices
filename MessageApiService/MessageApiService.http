@@ -1,0 +1,6 @@
+@MessageProcessing.Shared_HostAddress = http://localhost:5186
+
+GET {{MessageProcessing.Shared_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
